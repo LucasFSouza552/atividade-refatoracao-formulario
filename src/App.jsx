@@ -3,59 +3,29 @@ import './App.css'
 import axios from 'axios';
 
 function App() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [job, setJob] = useState('');
-  const [age, setAge] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [phone, setPhone] = useState('');
-  const [github, setGithub] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    job: '',
+    age: '',
+    city: '',
+    state: '',
+    phone: '',
+    github: ''
+  });
 
-  function handleNameChange(e) {
-    setName(e.target.value);
-  }
-
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
-  }
-
-  function handleJobChange(e) {
-    setJob(e.target.value);
-  }
-
-  function handleAgeChange(e) {
-    setAge(e.target.value);
-  }
-
-  function handleCityChange(e) {
-    setCity(e.target.value);
-  }
-
-  function handleStateChange(e) {
-    setState(e.target.value);
-  }
-
-  function handlePhoneChange(e) {
-    setPhone(e.target.value);
-  }
-
-  function handleGithubChange(e) {
-    setGithub(e.target.value);
+  function handleFieldChange(e) {
+    if (formData[e.target.name] === undefined) {
+      return;
+    }
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   }
 
   async function handleSubmit(e) {
-    const formData = {
-      name: name,
-      email: email,
-      job: job,
-      age: age,
-      city: city,
-      state: state,
-      phone: phone,
-      github: github
-    };
-
+    e.preventDefault();
     try {
       const response = await axios.post('https://reqres.in/api/users', formData, {
         headers: {
@@ -72,16 +42,16 @@ function App() {
   return (
     <div>
       <h2>Cadastro de Usuário</h2>
-      <form>
-        <input placeholder="Nome" value={name} onChange={handleNameChange} />
-        <input placeholder="Email" value={email} onChange={handleEmailChange} />
-        <input placeholder="Cargo" value={job} onChange={handleJobChange} />
-        <input placeholder="Idade" value={age} onChange={handleAgeChange} />
-        <input placeholder="Cidade" value={city} onChange={handleCityChange} />
-        <input placeholder="Estado" value={state} onChange={handleStateChange} />
-        <input placeholder="Telefone" value={phone} onChange={handlePhoneChange} />
-        <input placeholder="GitHub" value={github} onChange={handleGithubChange} />
-        <button type="button" onClick={handleSubmit}>Enviar</button>
+      <form onSubmit={handleSubmit}>
+        <input placeholder="Nome" required name="name" value={formData.name} onChange={handleFieldChange} />
+        <input placeholder="Email" required name="email" value={formData.email} onChange={handleFieldChange} />
+        <input placeholder="Cargo" required name="job" value={formData.job} onChange={handleFieldChange} />
+        <input placeholder="Idade" required name="age" value={formData.age} onChange={handleFieldChange} />
+        <input placeholder="Cidade" required name="city" value={formData.city} onChange={handleFieldChange} />
+        <input placeholder="Estado" required name="state" value={formData.state} onChange={handleFieldChange} />
+        <input placeholder="Telefone" required name="phone" value={formData.phone} onChange={handleFieldChange} />
+        <input placeholder="GitHub" required name="github" value={formData.github} onChange={handleFieldChange} />
+        <button type="submit">Enviar</button>
       </form>
     </div>
   );
